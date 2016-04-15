@@ -2,12 +2,13 @@
  * 
  */
 package com.flatironschool.javacs;
-
-import java.util.Arrays;
+import java.util.Arrays; 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.lang.IndexOutOfBoundsException;
 
 /**
  * @author downey
@@ -62,8 +63,15 @@ public class MyArrayList<E> implements List<E> {
 		if (index < 0 || index > size) {
 			throw new IndexOutOfBoundsException();
 		}
-		// TODO: fill in the rest of this method
-	}
+		if (size == array.length)
+          array = Arrays.copyOf(array, size*2);
+      if (index != size)
+         System.arraycopy(array, index, array, index + 1, size - index);
+      array[index] = element;
+      size++;
+      
+      // steph's code
+     }
 
 	@Override
 	public boolean addAll(Collection<? extends E> collection) {
@@ -111,8 +119,10 @@ public class MyArrayList<E> implements List<E> {
 
 	@Override
 	public int indexOf(Object target) {
-		// TODO: fill in this method
-		return 0;
+		for (int i = 0; i < size; i++)
+         if (equals(target, array[i]))
+            return i;
+      return -1;
 	}
 
 	/** Checks whether an element of the array is the target.
@@ -182,8 +192,16 @@ public class MyArrayList<E> implements List<E> {
 
 	@Override
 	public E remove(int index) {
-		// TODO: fill in this method.
-		return null;
+		if (index < 0 || index > size) {
+			throw new IndexOutOfBoundsException();
+		}
+      E result = array[index];
+      if(index != --size)
+         System.arraycopy(array, index + 1, array, index, size - index);
+      array[size] = null;
+      return result;
+      
+      
 	}
 
 	@Override
@@ -202,9 +220,20 @@ public class MyArrayList<E> implements List<E> {
 
 	@Override
 	public E set(int index, E element) {
-		// TODO: fill in this method.
-		return null;
+      
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+        
+        E result = (E) array[index];
+        array[index] = element;
+        return result; 
+        //steph's code
 	}
+
+
+
+
 
 	@Override
 	public int size() {
